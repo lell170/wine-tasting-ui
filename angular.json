@@ -24,11 +24,20 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
           "configurations": {
+            "dev2": {
+              "fileReplacements": [
+                {
+                  "replace": "src/assets/logo.png",
+                  "with": "custom/vinothek_munzert_logo.png"
+                }
+              ],
+              "serviceWorker": true
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -65,6 +74,9 @@
             "browserTarget": "wine-tasting-ui:build"
           },
           "configurations": {
+            "dev2": {
+              "browserTarget": "wine-tasting-ui:build:dev2"
+            },
             "production": {
               "browserTarget": "wine-tasting-ui:build:production"
             }
@@ -88,7 +100,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -119,6 +131,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "wine-tasting-ui"
 }

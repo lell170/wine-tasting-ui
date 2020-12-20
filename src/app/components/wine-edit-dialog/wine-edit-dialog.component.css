@@ -1,0 +1,7 @@
+#edit_dialog {
+  width: 100%;
+}
+
+#edit_dialog * {
+  margin: 5px;
+}
