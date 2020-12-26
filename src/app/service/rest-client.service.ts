@@ -22,7 +22,7 @@ export class RestClientService {
     return observable;
   }
 
-  httpPost(url: string, obj: any, options: {}): Observable<object> {
+  httpPost(url: string, obj: any, options: {}): Observable<HttpResponse<any>> {
     const observable = this.httpClient.post(url, obj, options).pipe(
       catchError(err => {
         return this.handleError(err);

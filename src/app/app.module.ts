@@ -23,10 +23,12 @@ import { ActionBarComponent } from './components/action-bar/action-bar.component
 import { WineTableComponent } from './components/wine-table/wine-table.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { WineDetailsViewComponent } from './components/wine-details-view/wine-details-view.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
-    MainComponent, WineEditDialogComponent, CameraComponent, HeaderComponent, ActionBarComponent, WineTableComponent, FooterComponent, ModalComponent
+    MainComponent, WineEditDialogComponent, CameraComponent, HeaderComponent, ActionBarComponent, WineTableComponent, FooterComponent, ModalComponent, WineDetailsViewComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import { ModalComponent } from './components/modal/modal.component';
     MatInputModule,
     MatSortModule,
     WebcamModule,
-    MatGridListModule
+    MatGridListModule,
+    MatCardModule
   ],
   providers: [     {
     provide: MatDialogRef,

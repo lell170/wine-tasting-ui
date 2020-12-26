@@ -74,3 +74,7 @@ $accent: mat-palette($mat-myapp-accent);
 $theme: mat-light-theme($primary, $accent);
 
 @include angular-material-theme($theme);
+
+.content_block {
+  margin: 10px;
+}

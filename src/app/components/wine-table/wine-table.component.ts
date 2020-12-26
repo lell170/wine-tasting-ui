@@ -1,16 +1,15 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Wine } from '../../model/wine';
 import { MatTableDataSource } from '@angular/material/table';
 import { WineEditDialogComponent } from '../wine-edit-dialog/wine-edit-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-wine-table',
   template: `
-    <div id="table">
+    <div class="content_block">
       <table mat-table [dataSource]="datasource" multiTemplateDataRows matSort class="mat-elevation-z8">
         <ng-container matColumnDef="id">
           <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-30'">ID</th>
@@ -41,8 +40,13 @@ import { MatSort } from '@angular/material/sort';
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-500'">Name</th>
-          <td mat-cell *matCellDef="let wine" [ngClass]="'w-500'">{{wine.name}}</td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let wine">{{wine.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="wineMaker">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Wine maker</th>
+          <td mat-cell *matCellDef="let wine">{{wine.wineMaker}}</td>
         </ng-container>
 
         <ng-container matColumnDef="description">
@@ -52,12 +56,12 @@ import { MatSort } from '@angular/material/sort';
 
         <ng-container matColumnDef="importDate">
           <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-150'">Import Date</th>
-          <td mat-cell *matCellDef="let wine" [ngClass]="'w-150'">{{wine.importDate | date:'dd.MM.yyyy HH:mm'}}</td>
+          <td mat-cell *matCellDef="let wine">{{wine.importDate | date:'dd.MM.yyyy HH:mm'}}</td>
         </ng-container>
 
         <ng-container matColumnDef="changeDate">
           <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-150'"> Change Date</th>
-          <td mat-cell *matCellDef="let wine" [ngClass]="'w-150'">{{wine.changeDate | date:'dd.MM.yyyy HH:mm'}}</td>
+          <td mat-cell *matCellDef="let wine">{{wine.changeDate | date:'dd.MM.yyyy HH:mm'}}</td>
         </ng-container>
 
         <ng-container matColumnDef="action">
@@ -69,12 +73,7 @@ import { MatSort } from '@angular/material/sort';
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container matColumnDef="expandedDetail">
           <td mat-cell *matCellDef="let wine" [attr.colspan]="displayedColumns.length" style="padding: 0">
-            <div class="element-detail"
-              [@detailExpand]="wine.expanded ? 'expanded' : 'collapsed'">
-              <div class="element-description">
-                {{wine.id}}
-              </div>
-            </div>
+            <app-wine-details-view [wine]="wine"></app-wine-details-view>
           </td>
         </ng-container>
 
@@ -88,18 +87,11 @@ import { MatSort } from '@angular/material/sort';
       </table>
     </div>
   `,
-  styleUrls: ['./wine-table.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  styleUrls: ['./wine-table.component.css']
 })
 export class WineTableComponent implements AfterViewInit {
 
-  displayedColumns = ['id', 'countryCode', 'picture', 'year', 'name', 'description', 'importDate', 'changeDate', 'action'];
+  displayedColumns = ['id', 'countryCode', 'picture', 'year', 'name', 'wineMaker', 'description', 'importDate', 'changeDate', 'action'];
   expandedElement: Wine | null;
 
   @Input() dialog: MatDialog;

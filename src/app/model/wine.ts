@@ -10,4 +10,6 @@ export class Wine {
   countryCode: string;
   type: string;
   grape: string;
+  wineMaker: string;
+  image: File;
 }

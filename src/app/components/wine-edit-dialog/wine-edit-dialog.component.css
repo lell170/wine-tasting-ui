@@ -5,3 +5,7 @@
 #edit_dialog * {
   margin: 5px;
 }
+
+#edit_dialog mat-form-field {
+  width: 100%;
+}

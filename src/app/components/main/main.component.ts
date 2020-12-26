@@ -34,7 +34,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.wineService.getAllWines().subscribe(value => {
+    this.wineService.getAll().subscribe(value => {
       this.wines = value.body;
       console.log(this.wines);
       this.dataSource = new MatTableDataSource(value.body);

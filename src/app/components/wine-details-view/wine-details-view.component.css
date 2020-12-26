@@ -1,0 +1,45 @@
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  background-color: #edebea;
+}
+
+#details_view {
+  width: 100%;
+  margin: 15px;
+}
+
+div.bold {
+  font-weight: bold;
+}
+
+.wine_name {
+  font-weight: bold;
+  font-size: large;
+  margin-left: 3px;
+}
+
+.wine_year {
+  color: #77767a;
+  margin-left: 3px;
+  font-size: small;
+}
+
+.wine_details_table {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.wine_details_button_area {
+  margin-top: 20px;
+}
+
+.wine_details_table_headline {
+  color: #77767a;
+  width: 100px;
+}
+
+.wine_details_table_value {
+  color: #650e1b;
+}

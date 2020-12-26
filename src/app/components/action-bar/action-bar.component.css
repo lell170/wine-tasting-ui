@@ -1,0 +1,8 @@
+#action_bar {
+  overflow: hidden;
+  padding: 5px;
+}
+
+#action_bar img {
+  cursor: pointer;
+}
