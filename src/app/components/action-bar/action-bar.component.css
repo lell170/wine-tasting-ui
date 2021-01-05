@@ -1,8 +1,14 @@
 #action_bar {
   overflow: hidden;
   padding: 5px;
+  background-color: white;
 }
 
 #action_bar img {
   cursor: pointer;
+}
+
+#action_bar .action_item {
+  float: left;
+ /* margin: 3px 3px 0 3px */
 }

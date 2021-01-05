@@ -1,16 +1,20 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Wine } from '../../model/wine';
 import { MatTableDataSource } from '@angular/material/table';
-import { WineEditDialogComponent } from '../wine-edit-dialog/wine-edit-dialog.component';
+import { WineEditDialogComponent } from '../dialog-components/wine-edit-dialog/wine-edit-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
 import { MatSort } from '@angular/material/sort';
+import { WineService } from '../../service/wine.service';
+import { WineTableDataService } from '../../service/wine-table-data.service';
+import { Constants } from '../../constants';
+import { DialogService } from '../../service/dialog.service';
 
 @Component({
   selector: 'app-wine-table',
   template: `
     <div class="content_block">
-      <table mat-table [dataSource]="datasource" multiTemplateDataRows matSort class="mat-elevation-z8">
+      <table mat-table [dataSource]="datasource" multiTemplateDataRows matSort>
         <ng-container matColumnDef="id">
           <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-30'">ID</th>
           <td id="{{wine.id}}" mat-cell *matCellDef="let wine" [ngClass]="'w-30'"> {{wine.id}} </td>
@@ -19,10 +23,9 @@ import { MatSort } from '@angular/material/sort';
         <ng-container matColumnDef="countryCode">
           <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-75'">Country</th>
           <td mat-cell *matCellDef="let wine" [ngClass]="'w-75'">
-            <img
+            <img class="country_flag"
               [src]="wine.countryCode !== null ? 'assets/countryFlags/' + wine.countryCode.toLowerCase() + '.svg' : null"
-              [alt]="wine.countryCode !== null ? wine.countryCode : 'none'"
-              style="width: 50px; height: 50px;" />
+              [alt]="wine.countryCode !== null ? wine.countryCode : 'none'" />
           </td>
         </ng-container>
 
@@ -30,8 +33,7 @@ import { MatSort } from '@angular/material/sort';
           <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-90'"> Picture</th>
           <td mat-cell *matCellDef="let wine" [ngClass]="'w-90'">
             <img (click)="onImageClick($event.target)"
-              src="assets/wine_pictures/{{wine.fileName}}" alt="foto"
-              style="max-width: 80px;" /></td>
+              [src]="getPicturePath(wine)" [alt]="getPicturePath(wine)" class="wine_picture" /></td>
         </ng-container>
 
         <ng-container matColumnDef="year">
@@ -54,9 +56,9 @@ import { MatSort } from '@angular/material/sort';
           <td mat-cell *matCellDef="let wine">{{wine.description}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="importDate">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-150'">Import Date</th>
-          <td mat-cell *matCellDef="let wine">{{wine.importDate | date:'dd.MM.yyyy HH:mm'}}</td>
+        <ng-container matColumnDef="creationDate">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-150'">Creation Date</th>
+          <td mat-cell *matCellDef="let wine">{{wine.creationDate | date:'dd.MM.yyyy HH:mm'}}</td>
         </ng-container>
 
         <ng-container matColumnDef="changeDate">
@@ -64,10 +66,30 @@ import { MatSort } from '@angular/material/sort';
           <td mat-cell *matCellDef="let wine">{{wine.changeDate | date:'dd.MM.yyyy HH:mm'}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="action">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>Action</th>
+        <ng-container matColumnDef="details">
+          <th mat-header-cell *matHeaderCellDef>Details</th>
           <td mat-cell *matCellDef="let wine">
-            <button mat-raised-button color="primary" (click)="openEditDialog(wine)">Edit</button>
+            <button mat-icon-button color="primary" class="expand_more">
+              <mat-icon class="expand_more">expand_more</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef>Delete</th>
+          <td mat-cell *matCellDef="let wine">
+            <button mat-icon-button color="primary">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let wine">
+            <button mat-icon-button (click)="openEditDialog(wine)">
+              <mat-icon>edit</mat-icon>
+            </button>
           </td>
         </ng-container>
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -80,7 +102,7 @@ import { MatSort } from '@angular/material/sort';
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr id="expanded_{{wine.id}}" mat-row *matRowDef="let wine; columns: displayedColumns;"
           class="example-element-row"
-          [class.example-expanded-row]="expandedElement === wine"
+          [class.example-expanded-row]="expandedWineObj === wine"
           (click)="expandRow(wine, $event)">
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
@@ -91,44 +113,35 @@ import { MatSort } from '@angular/material/sort';
 })
 export class WineTableComponent implements AfterViewInit {
 
-  displayedColumns = ['id', 'countryCode', 'picture', 'year', 'name', 'wineMaker', 'description', 'importDate', 'changeDate', 'action'];
-  expandedElement: Wine | null;
-
   @Input() dialog: MatDialog;
-  @Input() wines: Array<Wine>;
-  @Input() datasource: MatTableDataSource<any>;
   @Input() modalCompponent: ModalComponent;
-
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
+  expandedWineObj: Wine;
+  displayedColumns = Constants.getWineTableColumns();
+  datasource = new MatTableDataSource<Wine>();
+  wines = this.datasource.data;
+
+  constructor(
+    private wineService: WineService,
+    private wineTableDataService: WineTableDataService,
+    public dialogService: DialogService,
+  ) {
+    this.wineTableDataService.dataSourceSubject.subscribe(value => {
+      this.datasource = value;
+      this.wines = value.data;
+    });
+    this.wineTableDataService.reloadData();
   }
 
   /**
-   * method for opening edit view for selected wine
-   *
-   * @param wine to edit
-   */
-  openEditDialog(wine: Wine): void {
-    const dialogRef = this.dialog.open(WineEditDialogComponent, {
-      width: '100%',
-      data: {
-        dataKey: wine
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('some debug infos...');
-    });
-  }
-
-  /**
-   * method to expand and show details of table row
+   * method to expand and show details of given table row
    *
    * @param wineRow object from the row
    * @param event (javascript click event)
    */
   expandRow(wineRow, event): void {
-    if (event.target.tagName !== 'IMG' && !event.target.className.includes('button')) {
+    if (event.target.className.includes('expand_more')) {
       this.wines.map((wine) => {
         if (wineRow.id === wine.id) {
           wineRow.expanded = !wine.expanded;
@@ -139,8 +152,8 @@ export class WineTableComponent implements AfterViewInit {
   }
 
   /**
-   * handler for on image click event
-   * image will be show as full size in separate modal window
+   * click event handler for picture
+   * picture will be show full sized in separate modal window
    *
    * @param target EventTarget
    */
@@ -152,7 +165,7 @@ export class WineTableComponent implements AfterViewInit {
   }
 
   /**
-   * search filter field method
+   * search field handler
    *
    * @param value filter string
    */
@@ -160,8 +173,29 @@ export class WineTableComponent implements AfterViewInit {
     this.datasource.filter = value.value.trim().toLocaleLowerCase();
   }
 
+  /**
+   * gets path to picture file
+   *
+   * @param wine obj for which the path will be returnd
+   */
+  getPicturePath(wine: Wine): string {
+    if (wine.pictureFileName === null || wine.pictureFileName === '') {
+      return '';
+    } else {
+      return 'assets/wine_pictures/' + wine.pictureFileName;
+    }
+  }
+
+  /**
+   * opens edit dialog view for given wine
+   *
+   * @param wine obj for which the edit view will be open
+   */
+  openEditDialog(wine: Wine): void {
+    this.dialogService.openDialog(WineEditDialogComponent, wine, WineEditDialogComponent.width, WineEditDialogComponent.height);
+  }
+
   ngAfterViewInit(): void {
     this.datasource.sort = this.sort;
   }
-
 }

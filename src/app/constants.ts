@@ -26,4 +26,21 @@ export class Constants {
   static getWineTypes(): Array<string> {
     return ['RED', 'WHITE', 'ROSE', 'SPARKLING'];
   }
+
+  static getWineTableColumns(): Array<string> {
+    return [
+      'id',
+      'countryCode',
+      'picture',
+      'year',
+      'name',
+      'wineMaker',
+      'description',
+      'creationDate',
+      'changeDate',
+      'details',
+      'delete',
+      'edit'
+    ];
+  }
 }

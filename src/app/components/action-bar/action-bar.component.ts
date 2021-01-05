@@ -1,17 +1,43 @@
 import { Component, OnInit } from '@angular/core';
+import { WineEditDialogComponent } from '../dialog-components/wine-edit-dialog/wine-edit-dialog.component';
+import { Wine } from '../../model/wine';
+import { DialogService } from '../../service/dialog.service';
+import { CameraDialogComponent } from '../dialog-components/camera-component/camera-dialog.component';
 
 @Component({
   selector: 'app-action-bar',
   template: `
-    <div class="content_block" id="action_bar" [class.mat-elevation-z8]=true>
-      <div style="float: left; margin: 3px 3px 0 3px"><img src="assets/add.png" width="26px" height="26px" alt="add" /></div>
-      <div style="float: left; margin: 3px 3px 0 3px"><img src="assets/add_camera.png" width="24px" height="25px" alt="make_foto" /></div>
+    <div class="content_block" id="action_bar">
+      <div class="action_item">
+        <button mat-icon-button color="primary" (click)="createNewWine()">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+      <div class="action_item">
+        <button mat-icon-button color="primary">
+          <mat-icon>camera_alt</mat-icon>
+        </button>
+      </div>
+
+      <div class="action_item">
+        <button mat-icon-button color="primary">
+          <mat-icon>text_snippet</mat-icon>
+        </button>
+      </div>
     </div>`,
   styleUrls: ['./action-bar.component.css']
 })
 export class ActionBarComponent implements OnInit {
 
-  constructor() {
+  constructor(private dialogService: DialogService) {
+  }
+
+  openCamera(): void {
+    this.dialogService.openDialog(CameraDialogComponent, {}, CameraDialogComponent.width, CameraDialogComponent.height);
+  }
+
+  createNewWine(): void {
+    this.dialogService.openDialog(WineEditDialogComponent, new Wine(), WineEditDialogComponent.width, WineEditDialogComponent.height);
   }
 
   ngOnInit(): void {

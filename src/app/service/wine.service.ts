@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { RestClientService } from './rest-client.service';
 import { Observable } from 'rxjs';
 import { Wine } from '../model/wine';
@@ -15,16 +15,49 @@ export class WineService {
   }
 
   getAll(): Observable<HttpResponse<any>> {
-    return this.restClientService.httpGet(WineService.BASE_URL + 'all', { observe: 'response' });
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Cache-Control', 'no-cache');
+    httpHeaders.set('Pragma', 'no-cache');
+
+    const url = WineService.BASE_URL + 'all';
+    return this.restClientService.httpGet(url, { observe: 'response', headers: httpHeaders });
   }
 
-  // tslint:disable-next-line:ban-types
-  updateOrCreate(wine: Wine): Observable<HttpResponse<any>> {
-    const formData = new FormData();
-    formData.append('image', wine.image);
-    formData.append('wineDtoAsString', JSON.stringify(wine));
+  createWine(wine: Wine): Observable<any> {
+    const url = WineService.BASE_URL + 'create';
+    return this.restClientService.httpPost(url, wine, { observe: 'response' });
+  }
 
-    // const jsonType = HttpHeadersFactory.getHeaderByContentType(ContentType.JSON);
-    return this.restClientService.httpPost(WineService.BASE_URL + 'updateOrCreate', formData, { observe: 'response' });
+  updateWine(wine: Wine): Observable<any> {
+    const url = WineService.BASE_URL + 'update/' + wine.id + '/jsonData';
+    return this.restClientService.httpPost(url, wine, {});
+  }
+
+  cloneWineObject(from: Wine, to: Wine): Wine {
+    if (!to) {
+      to = new Wine();
+    }
+    to.grape = from.grape;
+    to.pictureFileName = from.pictureFileName;
+    to.id = from.id;
+    to.wineMaker = from.wineMaker;
+    to.year = from.year;
+    to.countryCode = from.countryCode;
+    to.type = from.type;
+    to.name = from.name;
+    to.description = from.description;
+    to.changeDate = from.changeDate;
+    to.creationDate = from.creationDate;
+    to.picture = from.picture;
+
+    return to;
+  }
+
+  uploadPicture(picture: File, wineId: number): Observable<HttpResponse<any>> {
+    const url = WineService.BASE_URL + 'update/' + wineId + '/picture';
+    const formData = new FormData();
+    formData.append('picture', picture);
+
+    return this.restClientService.httpPost(url, formData, { observe: 'response', responseType: 'text' });
   }
 }

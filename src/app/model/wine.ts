@@ -1,8 +1,9 @@
 export class Wine {
   id: number;
   name: string;
-  fileName: string;
-  importDate: string;
+  pictureFileName: string;
+  picture: File;
+  creationDate: string;
   changeDate: string;
   expanded: boolean;
   description: string;
@@ -11,5 +12,4 @@ export class Wine {
   type: string;
   grape: string;
   wineMaker: string;
-  image: File;
 }

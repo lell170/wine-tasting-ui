@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CameraComponent } from './camera.component';
+import { CameraDialogComponent } from './camera-dialog.component';
 
 describe('CameraComponentComponent', () => {
-  let component: CameraComponent;
-  let fixture: ComponentFixture<CameraComponent>;
+  let component: CameraDialogComponent;
+  let fixture: ComponentFixture<CameraDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CameraComponent ]
+      declarations: [ CameraDialogComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CameraComponent);
+    fixture = TestBed.createComponent(CameraDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

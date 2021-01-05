@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev-profile": "ng serve -c dev2"
+    "dev-profile": "ng serve -c dev2 --live-reload=false"
   },
   "private": true,
   "dependencies": {

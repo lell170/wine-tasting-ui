@@ -2,12 +2,10 @@ table {
   width: 100%;
 }
 
-td {
-  vertical-align: top;
-}
-
 td.mat-cell {
   padding: 10px 10px 6px 0;
+  text-align: left;
+  justify-content: center;
 }
 
 .mat-row:hover {
@@ -56,4 +54,23 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .w-500 {
   max-width: 100%;
+}
+
+img.country_flag {
+  width: 50px;
+  height: 50px;
+}
+
+img.wine_picture {
+  max-width: 80px;
+}
+
+::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: left;
+}
+
+mat-header-cell {
+  display: flex;
+  justify-content: flex-end;
 }

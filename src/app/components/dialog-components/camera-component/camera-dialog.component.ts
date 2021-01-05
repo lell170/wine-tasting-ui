@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebcamComponent, WebcamImage, WebcamInitError } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
-
 @Component({
   selector: 'app-camera-component',
   template: `
@@ -19,7 +18,9 @@ import { MatDialogRef } from '@angular/material/dialog';
         </div>
         <br />
         <button mat-raised-button color="primary" (click)="triggerSnapshot()" *ngIf="!webcamImage">Make picture</button>
-        <button mat-raised-button color="accent" mat-dialog-close (click)="closeWebcam()" *ngIf="webcamImage">Save picture and create new Item</button>
+        <button mat-raised-button color="accent" mat-dialog-close (click)="closeWebcam()" *ngIf="webcamImage">Save picture and create new
+          Item
+        </button>
         <button mat-raised-button (click)="triggerSnapshot()" *ngIf="webcamImage">Retake</button>
         <button mat-raised-button mat-dialog-close (click)="closeWebcam()">Close Webcam</button>
         <br />
@@ -31,9 +32,13 @@ import { MatDialogRef } from '@angular/material/dialog';
       <li>{{error | json}}</li>
     </ul>
   `,
-  styleUrls: ['./camera.component.css']
+  styleUrls: ['./camera-dialog.component.css']
 })
-export class CameraComponent implements OnInit {
+export class CameraDialogComponent implements OnInit {
+
+  static height = '100%';
+  static width = '100%';
+
   public showWebcam = true;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
@@ -47,7 +52,7 @@ export class CameraComponent implements OnInit {
 
   @ViewChild('webcam') webcam: WebcamComponent;
 
-  constructor(public dialogRef: MatDialogRef<CameraComponent>) {
+  constructor(public dialogRef: MatDialogRef<CameraDialogComponent>) {
   }
 
   public triggerSnapshot(): void {

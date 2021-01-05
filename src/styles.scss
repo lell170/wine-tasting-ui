@@ -75,6 +75,11 @@ $theme: mat-light-theme($primary, $accent);
 
 @include angular-material-theme($theme);
 
+body {
+  background-color: #edebea;
+  font-family: Roboto, "Helvetica Neue", sans-serif
+}
+
 .content_block {
   margin: 10px;
 }
