@@ -17,8 +17,6 @@ export class WineTableDataService {
 
   reloadData(): void {
     this.wineService.getAll().subscribe(value => {
-      console.log('reload data again');
-      console.log(value.body);
       this.dataSourceSubject.next(new MatTableDataSource<Wine>(value.body));
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ComponentType } from '@angular/cdk/portal';
+import { DialogComponent } from '../components/dialog-components/dialogComponent';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,10 @@ export class DialogService {
   constructor(public dialog: MatDialog) {
   }
 
-  // TODO: pass height and width per inheritance or generics design!
-  openDialog(component: ComponentType<any>, obj: any, widthSize: string, heightSize: string): void {
-    const dialogRef = this.dialog.open(component, {
-      width: widthSize,
-      height: heightSize,
+  openDialog(component: DialogComponent, obj: any): void {
+    const dialogRef = this.dialog.open(component.componentType, {
+      width: component.width,
+      height: component.height,
       data: {
         dataKey: obj
       }

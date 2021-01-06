@@ -90,9 +90,6 @@ import { WineTableDataService } from '../../../service/wine-table-data.service';
 
 export class WineEditDialogComponent {
 
-  static height = '500px;';
-  static width = '80%';
-
   clonedWine: Wine;
   referencedWien: Wine;
 

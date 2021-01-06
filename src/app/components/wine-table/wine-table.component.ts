@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Wine } from '../../model/wine';
 import { MatTableDataSource } from '@angular/material/table';
-import { WineEditDialogComponent } from '../dialog-components/wine-edit-dialog/wine-edit-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
 import { MatSort } from '@angular/material/sort';
@@ -9,6 +8,7 @@ import { WineService } from '../../service/wine.service';
 import { WineTableDataService } from '../../service/wine-table-data.service';
 import { Constants } from '../../constants';
 import { DialogService } from '../../service/dialog.service';
+import { DialogComponentFactory } from '../../factory/dialogComponentFactory';
 
 @Component({
   selector: 'app-wine-table',
@@ -192,7 +192,7 @@ export class WineTableComponent implements AfterViewInit {
    * @param wine obj for which the edit view will be open
    */
   openEditDialog(wine: Wine): void {
-    this.dialogService.openDialog(WineEditDialogComponent, wine, WineEditDialogComponent.width, WineEditDialogComponent.height);
+    this.dialogService.openDialog(DialogComponentFactory.getWineEditDialogComponent(), wine);
   }
 
   ngAfterViewInit(): void {

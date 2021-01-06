@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WineEditDialogComponent } from '../dialog-components/wine-edit-dialog/wine-edit-dialog.component';
 import { Wine } from '../../model/wine';
 import { DialogService } from '../../service/dialog.service';
-import { CameraDialogComponent } from '../dialog-components/camera-component/camera-dialog.component';
+import { DialogComponentFactory } from '../../factory/dialogComponentFactory';
 
 @Component({
   selector: 'app-action-bar',
@@ -33,11 +32,11 @@ export class ActionBarComponent implements OnInit {
   }
 
   openCamera(): void {
-    this.dialogService.openDialog(CameraDialogComponent, {}, CameraDialogComponent.width, CameraDialogComponent.height);
+    this.dialogService.openDialog(DialogComponentFactory.getCameraDialogComponent(), {});
   }
 
   createNewWine(): void {
-    this.dialogService.openDialog(WineEditDialogComponent, new Wine(), WineEditDialogComponent.width, WineEditDialogComponent.height);
+    this.dialogService.openDialog(DialogComponentFactory.getWineEditDialogComponent(), new Wine());
   }
 
   ngOnInit(): void {

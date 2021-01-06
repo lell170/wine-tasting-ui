@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebcamComponent, WebcamImage, WebcamInitError } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-camera-component',
   template: `
@@ -35,9 +36,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./camera-dialog.component.css']
 })
 export class CameraDialogComponent implements OnInit {
-
-  static height = '100%';
-  static width = '100%';
 
   public showWebcam = true;
   public deviceId: string;
@@ -90,4 +88,6 @@ export class CameraDialogComponent implements OnInit {
   public ngOnInit(): void {
 
   }
+
+
 }
