@@ -29,8 +29,8 @@ export class WineService {
   }
 
   updateWine(wine: Wine): Observable<any> {
-    const url = WineService.BASE_URL + 'update/' + wine.id + '/jsonData';
-    return this.restClientService.httpPost(url, wine, {});
+    const url = WineService.BASE_URL + 'update/' + wine.id + '/json';
+    return this.restClientService.httpPut(url, wine, {});
   }
 
   cloneWineObject(from: Wine, to: Wine): Wine {
@@ -56,8 +56,8 @@ export class WineService {
   uploadPicture(picture: File, wineId: number): Observable<HttpResponse<any>> {
     const url = WineService.BASE_URL + 'update/' + wineId + '/picture';
     const formData = new FormData();
-    formData.append('picture', picture);
+    formData.append('pictureFile', picture);
 
-    return this.restClientService.httpPost(url, formData, { observe: 'response', responseType: 'text' });
+    return this.restClientService.httpPut(url, formData, { observe: 'response', responseType: 'text' });
   }
 }

@@ -31,6 +31,15 @@ export class RestClientService {
     return observable;
   }
 
+  httpPut(url: string, obj: any, options: {}): Observable<HttpResponse<any>> {
+    const observable = this.httpClient.put(url, obj, options).pipe(
+      catchError(err => {
+        return this.handleError(err);
+      }));
+    this.alertService.hideAlert();
+    return observable;
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     this.createAlertObject(error.message);
     return throwError(error);
