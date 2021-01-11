@@ -1,0 +1,20 @@
+<div class="element-detail"
+  [@detailExpand]="wine.expanded ? 'expanded' : 'collapsed'">
+  <div id="details_view">
+
+    <div style="width: 250px; height: 100%;">
+      <div class="picture_placeholder">
+        <span *ngIf="!!!pictureService.getPictureFileName(wine)" class="material-icons" style="font-size: 48px; color: #77767a">photo</span>
+        <img class="wine_picture" *ngIf="pictureService.getPictureFileName(wine)" [src]="pictureService.getPicturePath(wine)" [alt]="pictureService.getPicturePath(wine)">
+      </div>
+    </div>
+    <div class="details_view_">
+      <div class="details_view_header">{{wine.winery}} {{wine.grape}} {{wine.name}} {{wine.year}}</div>
+      <app-details-view-section *ngFor="let detailViewSection of detailsDataSections" [detailsSection]="detailViewSection"></app-details-view-section>
+    </div>
+
+   <!-- <div class="wine_details_button_area">
+      <button mat-flat-button color="primary" (click)="wine.expanded = !wine.expanded">CLOSE</button>
+    </div>-->
+  </div>
+</div>

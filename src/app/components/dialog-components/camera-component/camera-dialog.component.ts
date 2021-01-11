@@ -2,40 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebcamComponent, WebcamImage, WebcamInitError } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
+import { DialogComponentFactory } from '../../../factory/dialogComponentFactory';
+import { Wine } from '../../../model/wine';
+import { DialogService } from '../../../service/dialog.service';
+import { Picture } from '../../../model/picture';
 
 @Component({
   selector: 'app-camera-component',
-  template: `
-    <div style="text-align:center">
-      <div>
-        <webcam #webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
-          [videoOptions]="videoOptions"
-          [imageQuality]="1"
-          (initError)="handleInitError($event)"
-          (click)="triggerSnapshot()"
-        ></webcam>
-        <div class="snapshot" *ngIf="webcamImage" (click)="triggerSnapshot()">
-          <img [src]="webcamImage.imageAsDataUrl" alt="" />
-        </div>
-        <br />
-        <button mat-raised-button color="primary" (click)="triggerSnapshot()" *ngIf="!webcamImage">Make picture</button>
-        <button mat-raised-button color="accent" mat-dialog-close (click)="closeWebcam()" *ngIf="webcamImage">Save picture and create new
-          Item
-        </button>
-        <button mat-raised-button (click)="triggerSnapshot()" *ngIf="webcamImage">Retake</button>
-        <button mat-raised-button mat-dialog-close (click)="closeWebcam()">Close Webcam</button>
-        <br />
-      </div>
-    </div>
-
-    <h4 *ngIf="errors.length > 0">Messages:</h4>
-    <ul *ngFor="let error of errors">
-      <li>{{error | json}}</li>
-    </ul>
-  `,
+  templateUrl: './camera-dialog.component.html',
   styleUrls: ['./camera-dialog.component.css']
 })
-export class CameraDialogComponent implements OnInit {
+
+export class CameraDialogComponent {
 
   public showWebcam = true;
   public deviceId: string;
@@ -50,7 +28,7 @@ export class CameraDialogComponent implements OnInit {
 
   @ViewChild('webcam') webcam: WebcamComponent;
 
-  constructor(public dialogRef: MatDialogRef<CameraDialogComponent>) {
+  constructor(public dialogRef: MatDialogRef<CameraDialogComponent>, private dialogService: DialogService) {
   }
 
   public triggerSnapshot(): void {
@@ -68,6 +46,15 @@ export class CameraDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  public createWine(): void {
+    this.dialogRef.close();
+    const wine = new Wine();
+    const picture = new Picture();
+    picture.pictureAsBase64 = this.webcamImage.imageAsBase64;
+    wine.pictures.push(picture);
+    this.dialogService.openDialog(DialogComponentFactory.getWineEditDialogComponent(), wine);
+  }
+
   public handleInitError(error: WebcamInitError): void {
     this.errors.push(error);
   }
@@ -83,10 +70,6 @@ export class CameraDialogComponent implements OnInit {
 
   public get nextWebcamObservable(): Observable<boolean | string> {
     return this.nextWebcam.asObservable();
-  }
-
-  public ngOnInit(): void {
-
   }
 
 

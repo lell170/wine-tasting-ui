@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 // @ts-ignore
 import { version } from '../../../../package.json';
 
@@ -10,14 +10,8 @@ import { version } from '../../../../package.json';
     </div>`,
   styleUrls: ['./footer.component.css']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
 
   version: string = version;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
 }

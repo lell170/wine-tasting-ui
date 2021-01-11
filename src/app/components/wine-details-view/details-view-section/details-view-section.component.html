@@ -1,0 +1,14 @@
+<div class="section_title">
+  {{detailsSection.header}}
+</div>
+<table class="section_table">
+  <tr *ngFor="let item of detailsSection.fields">
+    <td class="section_table_title">{{item.title}}</td>
+    <td class="section_table_value">
+      <div *ngIf="isNumberType(item.fieldType) && item.value!=0">
+        <mat-progress-bar mode="determinate" value="{{item.value}}"></mat-progress-bar>
+      </div>
+      <div *ngIf="isStringType(item.fieldType)">{{item.value}}</div>
+    </td>
+  </tr>
+</table>

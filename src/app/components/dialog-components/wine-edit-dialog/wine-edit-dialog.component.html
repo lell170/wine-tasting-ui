@@ -1,0 +1,171 @@
+<!--suppress ALL -->
+<form [formGroup]="wineFormGroup">
+  <mat-dialog-content class="mat-typography">
+    <div id="edit_dialog">
+      <div class="form_headline">
+        <div mat-dialog-title style="margin: 0">Wein Form</div>
+      </div>
+      <div class="form_description">Allgemeine Informationen</div>
+      <div style="float: left; width: 20%; height: 100%;">
+        <app-picture [picture]="picture"></app-picture>
+      </div>
+
+      <div style="width: 78%; float: left;">
+        <mat-grid-list cols="3" rowHeight="80px">
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <app-autocomplete-box [autocompleteBox]="wineriesAutocompleteBox" [formGroup]="wineFormGroup"></app-autocomplete-box>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <app-select-list [controlName]="'year'" [values]="constantsService.getYears()"
+              [formGroup]="wineFormGroup" label="Jahr"></app-select-list>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field appearance="outline">
+              <mat-label>Land</mat-label>
+              <mat-select formControlName="countryCode">
+                <mat-option *ngFor="let country of countries" [value]="country.countryCode">
+                  {{country.country}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <app-autocomplete-box [autocompleteBox]="grapesAutocompleteBox" [formGroup]="wineFormGroup"></app-autocomplete-box>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <app-select-list [controlName]="'type'" [values]="constantsService.getWineTypes()" [formGroup]="wineFormGroup"
+              [valueChangedFunction]="wineTypeChanged" label="Weintyp"></app-select-list>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field appearance="outline">
+              <mat-label>Gesamtbewertung 1-100</mat-label>
+              <input matInput formControlName="overallRating">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Verkostungsdatum wählen</mat-label>
+              <input matInput formControlName="tastingDate" [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="3" [rowspan]="1.5">
+            <mat-form-field appearance="outline">
+              <mat-label>Beschreibung</mat-label>
+              <textarea matInput formControlName="description" style="resize: none" rows="5"></textarea>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <div>
+    <div class="form_description" style="margin-top: 10px;">Optischer Eindruck</div>
+    <form [formGroup]="opticalValueFormGroup">
+      <input type="hidden" formControlName="id">
+      <mat-grid-list cols="3" rowHeight="80px">
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <app-select-list [controlName]="'clarity'" [values]="constantsService.getColorClarityOptions()"
+            [formGroup]="opticalValueFormGroup" label="Klarheit"></app-select-list>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <app-select-list #colorsComponent [controlName]="'color'" [values]="setWineColors(wine)"
+            [formGroup]="opticalValueFormGroup" label="Farbe"></app-select-list>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Intensität</div>
+          <mat-slider matInput formControlName="intensity"
+            [(value)]="opticalValueFormGroup.value.intensity"></mat-slider>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+
+    <div class="form_description">Geruch / Nase</div>
+    <form [formGroup]="noseValueFormGroup">
+      <input type="hidden" formControlName="id">
+
+      <mat-grid-list cols="3" rowHeight="80px">
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <app-select-list [controlName]="'growth'" [values]="constantsService.getNoseGrowth()"
+            [formGroup]="noseValueFormGroup" label="Entwicklung"></app-select-list>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-form-field appearance="outline">
+            <mat-label>Ausdruck</mat-label>
+            <input matInput formControlName="expression">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Intensität</div>
+          <mat-slider matInput formControlName="intensity" [(value)]="noseValueFormGroup.value.intensity"></mat-slider>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </form>
+
+    <div class="form_description">Geschmack</div>
+    <form [formGroup]="flavorValueFormGroup">
+      <input type="hidden" formControlName="id">
+
+      <mat-grid-list cols="3" rowHeight="80px">
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Süße</div>
+          <mat-slider matInput formControlName="sweetness"
+            [(value)]="flavorValueFormGroup.value.sweetness"></mat-slider>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Säure</div>
+          <mat-slider matInput formControlName="acid" [(value)]="flavorValueFormGroup.value.acid"></mat-slider>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Tannin / Gerbstoffe</div>
+          <mat-slider matInput formControlName="tannin" [(value)]="flavorValueFormGroup.value.tannin"></mat-slider>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Alkohol</div>
+          <mat-slider matInput formControlName="alcohol" [(value)]="flavorValueFormGroup.value.alcohol"></mat-slider>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <div>Körper</div>
+          <mat-slider matInput formControlName="body" [(value)]="flavorValueFormGroup.value.body"></mat-slider>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-form-field appearance="outline">
+            <mat-label>Ausdruck</mat-label>
+            <input matInput formControlName="expression">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </div>
+
+  <div>
+    <mat-dialog-actions>
+      <button mat-raised-button color="primary" [mat-dialog-close]="true" (click)="saveWine()">Speichern</button>
+      <button mat-button color="warn" mat-dialog-close>Abbrechen</button>
+    </mat-dialog-actions>
+  </div>
+</form>

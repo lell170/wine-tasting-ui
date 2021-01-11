@@ -8,6 +8,7 @@
 #details_view {
   width: 100%;
   margin: 15px;
+  display: flex;
 }
 
 div.bold {
@@ -42,4 +43,18 @@ div.bold {
 
 .wine_details_table_value {
   color: #650e1b;
+}
+
+div.details_view_ {
+  float: left;
+  flex-grow: 1;
+  margin-top: 5px;
+}
+
+div.details_view_header {
+  width: 100%;
+  font-weight: 500;
+  font-size: 14px;
+  color: #650e1b;
+  border-bottom: 1px solid #c9c8c5;
 }

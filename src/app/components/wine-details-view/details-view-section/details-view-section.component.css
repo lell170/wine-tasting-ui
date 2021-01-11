@@ -1,0 +1,26 @@
+div.section_title {
+  color: #666666;
+  font-weight: 500;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+
+table.section_table {
+  border-collapse: separate;
+  border-spacing: 0 0;
+}
+
+table.section_table td.section_table_title {
+  font-size: 13px;
+  font-weight: 400;
+  color: #666666;
+  min-width: 200px;
+}
+
+table.section_table td.section_table_value {
+  font-size: 13px;
+  font-weight: 400;
+  color: #650e1b;
+  min-width: 200px;
+}

@@ -21,3 +21,17 @@
 #filter_field mat-form-field {
   width: 100%;
 }
+
+.logout {
+  color: #650e1b;
+  font-size: small;
+  position: absolute;
+  right: 0;
+  margin-right: 17px;
+}
+
+.logout #logout_link {
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}

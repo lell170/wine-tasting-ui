@@ -1,0 +1,24 @@
+<div style="text-align:center">
+  <div>
+    <webcam #webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+      [videoOptions]="videoOptions"
+      [imageQuality]="1"
+      (initError)="handleInitError($event)"
+      (click)="triggerSnapshot()">
+    </webcam>
+    <div class="snapshot" *ngIf="webcamImage" (click)="triggerSnapshot()">
+      <img [src]="webcamImage.imageAsDataUrl" alt="" />
+    </div>
+    <br />
+    <button mat-raised-button color="primary" (click)="triggerSnapshot()" *ngIf="!webcamImage">Make picture</button>
+    <button mat-raised-button color="accent" mat-dialog-close (click)="createWine()" *ngIf="webcamImage">Create new Wine from Picture</button>
+    <button mat-raised-button (click)="triggerSnapshot()" *ngIf="webcamImage">Retake</button>
+    <button mat-raised-button mat-dialog-close (click)="closeWebcam()">Close Webcam</button>
+    <br />
+  </div>
+</div>
+
+<h4 *ngIf="errors.length > 0">Messages:</h4>
+<ul *ngFor="let error of errors">
+  <li>{{error | json}}</li>
+</ul>

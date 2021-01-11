@@ -1,22 +1,19 @@
 import { Component } from '@angular/core';
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-root',
   template: `
-    <app-modal #modalComponent></app-modal>
-    <app-header #headerComponent
-      [wineTableComponent]="wineTableComponent">
-    </app-header>
-    <app-action-bar #actionBarComponent></app-action-bar>
-    <app-wine-table #wineTableComponent
-      [modalCompponent]="modalComponent">
-    </app-wine-table>
-    <app-footer #footerComponent></app-footer>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
   `,
   styleUrls: ['./main.component.css']
 })
 
 export class MainComponent {
+
+  user: User;
 
   title = 'Wine Tasting App';
 

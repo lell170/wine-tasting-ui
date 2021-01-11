@@ -1,29 +1,13 @@
-import { AfterContentInit, AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { Wine } from '../../model/wine';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { KeyValue } from '@angular/common';
+import { PictureService } from '../../service/picture.service';
+import { DetailSection } from '../../model/detailSection';
+import { DetailViewService } from '../../service/detail-view.service';
 
 @Component({
   selector: 'app-wine-details-view',
-  template: `
-      <div class="element-detail"
-        [@detailExpand]="wine.expanded ? 'expanded' : 'collapsed'">
-        <div id="details_view">
-          <div class="wine_name">{{wine.name}}</div>
-          <div class="wine_year">{{wine.year}}</div>
-          <table class="wine_details_table">
-            <tbody>
-              <tr *ngFor="let wineAttr of wineAttributes | keyvalue : unsorted">
-                <td class="wine_details_table_headline">{{wineAttr.value}}</td>
-                <td class="wine_details_table_value">{{wine[wineAttr.key]}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="wine_details_button_area">
-            <button mat-flat-button color="primary" (click)="wine.expanded = !wine.expanded">CLOSE</button>
-          </div>
-        </div>
-      </div>`,
+  templateUrl: './wine-details-view.component.html',
   styleUrls: ['./wine-details-view.component.css'],
   animations: [trigger('detailExpand', [
     state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -35,23 +19,21 @@ export class WineDetailsViewComponent implements AfterViewInit {
 
   @Input()
   wine: Wine;
-  wineAttributes = new Map([
-    ['countryCode', 'Country'],
-    ['name', 'Name'],
-    ['wineMaker', 'Wine maker'],
-    ['year', 'Year'],
-    ['importDate', 'Import Date'],
-    ['changeDate', 'Change Date'],
-    ['description', 'Description']
-  ]);
+  detailsDataSections: Array<DetailSection> = new Array<DetailSection>();
 
-  constructor() {
+
+  constructor(public pictureService: PictureService, public detailViewService: DetailViewService) {
   }
 
   ngAfterViewInit(): void {
-  }
+    const wineFields = this.detailViewService.getWineFields(this.wine);
+    const opticalValueFields = this.detailViewService.getOpticalValueFields(this.wine);
+    const noseValueFields = this.detailViewService.getNoseValueFields(this.wine);
+    const flavorValueFields = this.detailViewService.getFlavorValueFields(this.wine);
 
-  unsorted(): number {
-    return;
+    this.detailsDataSections.push(new DetailSection('Allgeimein', wineFields));
+    this.detailsDataSections.push(new DetailSection('Optischer Eindruck', opticalValueFields));
+    this.detailsDataSections.push(new DetailSection('Nase', noseValueFields));
+    this.detailsDataSections.push(new DetailSection('Geschmack', flavorValueFields));
   }
 }

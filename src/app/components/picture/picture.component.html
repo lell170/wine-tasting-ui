@@ -1,0 +1,19 @@
+<div class="picture_placeholder">
+          <span *ngIf="!picture.srcValue && !commonService.hasLength(pictureService.getPictureFileName(picture.wine))"
+            class="material-icons"
+            style="font-size: 48px; color: #77767a">photo</span>
+  <img class="wine_picture" *ngIf="picture.srcValue" [src]="picture.srcValue" alt="wine_picture" />
+  <img class="wine_picture" *ngIf="pictureService.getPictureFileName(picture.wine) && !picture.srcValue"
+    [src]="pictureService.getPicturePath(picture.wine)"
+    [alt]="pictureService.getPicturePath(picture.wine)" />
+</div>
+<div>
+  <div>
+    <label class="picture_upload">Bild (Etikett hochladen)
+      <input #imageInput id="imageInput"
+        type="file"
+        accept="image/*"
+        (change)="processPictureFile(imageInput)" hidden>
+    </label>
+  </div>
+</div>

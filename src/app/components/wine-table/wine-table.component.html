@@ -1,0 +1,95 @@
+<div class="content_block">
+  <table mat-table [dataSource]="datasource" multiTemplateDataRows matSort>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-30'">ID</th>
+      <td id="{{wine.id}}" mat-cell *matCellDef="let wine" [ngClass]="'w-30'"> {{wine.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="countryCode">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-75'">Land</th>
+      <td mat-cell *matCellDef="let wine" [ngClass]="'w-75'">
+        <img *ngIf="!!wine.countryCode" class="country_flag"
+          [src]="wine.countryCode !== null ? 'assets/countryFlags/' + wine.countryCode.toLowerCase() + '.svg' : null"
+          [alt]="wine.countryCode !== null ? wine.countryCode : 'none'" />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="picture">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-90'">Foto</th>
+      <td mat-cell *matCellDef="let wine" [ngClass]="'w-90'">
+        <img *ngIf="pictureService.getPicturePath(wine)" (click)="onImageClick($event.target)"
+          [src]="pictureService.getPicturePath(wine)" [alt]="pictureService.getPicturePath(wine)" class="wine_picture" /></td>
+    </ng-container>
+
+    <ng-container matColumnDef="year">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-75'">Jahr</th>
+      <td mat-cell *matCellDef="let wine" [ngClass]="'w-75'">{{wine.year}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let wine">{{wine.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="winery">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Winzer</th>
+      <td mat-cell *matCellDef="let wine">{{wine.winery}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Beschreibung</th>
+      <td mat-cell *matCellDef="let wine">{{wine.description}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="tastingDate">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-150'">Verkostungsdatum</th>
+      <td mat-cell *matCellDef="let wine">{{wine.tastingDate | date:'dd.MM.yyyy'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="created">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="'w-150'">Erstellungsdatum</th>
+      <td mat-cell *matCellDef="let wine">{{wine.created | date:'dd.MM.yyyy'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="details">
+      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-75'">Details</th>
+      <td mat-cell *matCellDef="let wine">
+        <button mat-icon-button color="primary" class="expand_more">
+          <mat-icon class="expand_more">expand_more</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-75'">Delete</th>
+      <td mat-cell *matCellDef="let wine">
+        <button mat-icon-button color="primary" (click)="deleteWine(wine)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-75'">Edit</th>
+      <td mat-cell *matCellDef="let wine">
+        <button mat-icon-button (click)="openEditDialog(wine)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let wine" [attr.colspan]="displayedColumns.length" style="padding: 0">
+        <app-wine-details-view [wine]="wine"></app-wine-details-view>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr id="expanded_{{wine.id}}" mat-row *matRowDef="let wine; columns: displayedColumns;"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedWineObj === wine"
+      (click)="expandRow(wine, $event)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+</div>

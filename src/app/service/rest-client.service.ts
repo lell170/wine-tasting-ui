@@ -40,6 +40,15 @@ export class RestClientService {
     return observable;
   }
 
+  httpDelete(url: string): Observable<HttpResponse<any>> {
+    const observable = this.httpClient.delete(url).pipe(
+      catchError(err => {
+        return this.handleError(err);
+      }));
+    this.alertService.hideAlert();
+    return observable;
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     this.createAlertObject(error.message);
     return throwError(error);

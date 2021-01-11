@@ -3,13 +3,17 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { RestClientService } from './rest-client.service';
 import { Observable } from 'rxjs';
 import { Wine } from '../model/wine';
+import { OpticalValue } from '../model/opticalValue';
+import { FlavorValue } from '../model/flavorValue';
+import { NoseValue } from '../model/noseValue';
+import { Picture } from '../model/picture';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WineService {
 
-  private static BASE_URL = 'http://localhost/api/wine/';
+  public static BASE_URL = 'api/wine/';
 
   constructor(private httpClient: HttpClient, private restClientService: RestClientService) {
   }
@@ -33,31 +37,46 @@ export class WineService {
     return this.restClientService.httpPut(url, wine, {});
   }
 
-  cloneWineObject(from: Wine, to: Wine): Wine {
-    if (!to) {
-      to = new Wine();
-    }
-    to.grape = from.grape;
-    to.pictureFileName = from.pictureFileName;
-    to.id = from.id;
-    to.wineMaker = from.wineMaker;
-    to.year = from.year;
-    to.countryCode = from.countryCode;
-    to.type = from.type;
-    to.name = from.name;
-    to.description = from.description;
-    to.changeDate = from.changeDate;
-    to.creationDate = from.creationDate;
-    to.picture = from.picture;
+  cloneWine(from: Wine): Wine {
 
-    return to;
+    const wine = new Wine();
+
+    wine.grape = from.grape;
+    if (!from.pictures) {
+      wine.pictures = new Array<Picture>(new Picture());
+    } else {
+      wine.pictures = from.pictures;
+    }
+    wine.id = from.id;
+    wine.winery = from.winery;
+    wine.year = from.year;
+    wine.countryCode = from.countryCode;
+    wine.type = from.type;
+    wine.name = from.name;
+    wine.description = from.description;
+    wine.updated = from.updated;
+    wine.created = from.created;
+    wine.overallRating = from.overallRating;
+    wine.tastingDate = from.tastingDate;
+
+    if (!from.opticalValue) {
+      from.opticalValue = new OpticalValue();
+    }
+    if (!from.noseValue) {
+      from.noseValue = new NoseValue();
+    }
+    if (!from.flavorValue) {
+      from.flavorValue = new FlavorValue();
+    }
+    wine.opticalValue = from.opticalValue;
+    wine.noseValue = from.noseValue;
+    wine.flavorValue = from.flavorValue;
+
+    return wine;
   }
 
-  uploadPicture(picture: File, wineId: number): Observable<HttpResponse<any>> {
-    const url = WineService.BASE_URL + 'update/' + wineId + '/picture';
-    const formData = new FormData();
-    formData.append('pictureFile', picture);
-
-    return this.restClientService.httpPut(url, formData, { observe: 'response', responseType: 'text' });
+  deleteWine(wine: Wine): Observable<any> {
+    const url = WineService.BASE_URL + 'delete/' + wine.id;
+    return this.restClientService.httpDelete(url);
   }
 }

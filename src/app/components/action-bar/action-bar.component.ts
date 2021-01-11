@@ -5,25 +5,7 @@ import { DialogComponentFactory } from '../../factory/dialogComponentFactory';
 
 @Component({
   selector: 'app-action-bar',
-  template: `
-    <div class="content_block" id="action_bar">
-      <div class="action_item">
-        <button mat-icon-button color="primary" (click)="createNewWine()">
-          <mat-icon>add_box</mat-icon>
-        </button>
-      </div>
-      <div class="action_item">
-        <button mat-icon-button color="primary">
-          <mat-icon>camera_alt</mat-icon>
-        </button>
-      </div>
-
-      <div class="action_item">
-        <button mat-icon-button color="primary">
-          <mat-icon>text_snippet</mat-icon>
-        </button>
-      </div>
-    </div>`,
+  templateUrl: './action-bar.component.html',
   styleUrls: ['./action-bar.component.css']
 })
 export class ActionBarComponent implements OnInit {

@@ -1,0 +1,15 @@
+<form [formGroup]="formGroup">
+  <mat-form-field appearance="outline" *ngIf="autocompleteBox.valuesLoaded | async">
+    <mat-label>{{autocompleteBox.title}}</mat-label>
+    <input type="text"
+      placeholder="Pick one"
+      matInput
+      formControlName="{{autocompleteBox.formControlName}}"
+      [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let value of autocompleteBox.filteredValues | async" [value]="value">
+        {{value}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

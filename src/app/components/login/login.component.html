@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <img src="assets/logo.png" alt="logo">
+      <mat-form-field class="full-width-input">
+        <label>
+          <input matInput placeholder="Email" formControlName="email" required>
+        </label>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <label>
+          <input matInput type="password" placeholder="Password" formControlName="password" required>
+        </label>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="loginForm.disabled">Login</button>
+    </form>
+  </mat-card-content>
+</mat-card>
